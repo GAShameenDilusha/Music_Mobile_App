@@ -9,21 +9,20 @@ import {
     FlatList,
     TouchableOpacity,
 } from "react-native";
-import { WebView } from "react-native-webview";
 
 // Type definitions
 interface Song {
     id: string;
     title: string;
     artist: string;
-    albumCover?: string;
+    albumCoverImage: any; // Changed to accept local image requires
 }
 
 // Card component
-const Card = ({ title, description, source }: any) => {
+const Card = ({ title, description, imageSource }: { title: string; description: string; imageSource: any }) => {
     return (
         <View style={styles.card}>
-            <WebView style={styles.webView} source={{ uri: source }} />
+            <Image source={imageSource} style={styles.cardImage} />
             <Text style={styles.cardTitle}>{title}</Text>
             <Text style={styles.cardDescription}>{description}</Text>
         </View>
@@ -38,25 +37,23 @@ const SongListItem = ({ song }: { song: Song }) => {
                 <Text style={styles.songTitle}>{song.title}</Text>
                 <Text style={styles.songArtist}>{song.artist}</Text>
             </View>
-            {song.albumCover && (
-                <Image source={{ uri: song.albumCover }} style={styles.albumCover} />
-            )}
+            <Image source={song.albumCoverImage} style={styles.albumCover} />
         </TouchableOpacity>
     );
 };
 
 // Search component
 const Search = () => {
-    // Sample songs data
+    // Sample songs data with local images
     const sampleSongs: Song[] = [
-        { id: '1', title: 'Bohemian Rhapsody', artist: 'Queen', albumCover: 'https://via.placeholder.com/50' },
-        { id: '2', title: 'Stairway to Heaven', artist: 'Led Zeppelin', albumCover: 'https://via.placeholder.com/50' },
-        { id: '3', title: 'Hotel California', artist: 'Eagles', albumCover: 'https://via.placeholder.com/50' },
-        { id: '4', title: 'Sweet Child O\' Mine', artist: 'Guns N\' Roses', albumCover: 'https://via.placeholder.com/50' },
-        { id: '5', title: 'Imagine', artist: 'John Lennon', albumCover: 'https://via.placeholder.com/50' },
-        { id: '6', title: 'Smells Like Teen Spirit', artist: 'Nirvana', albumCover: 'https://via.placeholder.com/50' },
-        { id: '7', title: 'Billie Jean', artist: 'Michael Jackson', albumCover: 'https://via.placeholder.com/50' },
-        { id: '8', title: 'Like a Rolling Stone', artist: 'Bob Dylan', albumCover: 'https://via.placeholder.com/50' },
+        { id: '1', title: 'Bohemian Rhapsody', artist: 'Queen', albumCoverImage: require('@/assets/img/music 10.jpg') },
+        { id: '2', title: 'Stairway to Heaven', artist: 'Led Zeppelin', albumCoverImage: require('@/assets/img/music 10.jpg') },
+        { id: '3', title: 'Hotel California', artist: 'Eagles', albumCoverImage: require('@/assets/img/music 10.jpg') },
+        { id: '4', title: 'Sweet Child O\' Mine', artist: 'Guns N\' Roses', albumCoverImage: require('@/assets/img/music 10.jpg') },
+        { id: '5', title: 'Imagine', artist: 'John Lennon', albumCoverImage: require('@/assets/img/music 10.jpg') },
+        { id: '6', title: 'Smells Like Teen Spirit', artist: 'Nirvana', albumCoverImage: require('@/assets/img/music 10.jpg') },
+        { id: '7', title: 'Billie Jean', artist: 'Michael Jackson', albumCoverImage: require('@/assets/img/music 10.jpg') },
+        { id: '8', title: 'Like a Rolling Stone', artist: 'Bob Dylan', albumCoverImage: require('@/assets/img/music 10.jpg') },
     ];
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -104,22 +101,22 @@ const Search = () => {
                         <Card
                             title="Top Hits"
                             description="The most popular songs right now"
-                            source={require('@/assets/img/music 10.jpg')}
+                            imageSource={require('@/assets/img/music 10.jpg')}
                         />
                         <Card
                             title="New Releases"
                             description="Check out the newest music"
-                            source="https://via.placeholder.com/150"
+                            imageSource={require('@/assets/img/music 10.jpg')}
                         />
                         <Card
                             title="Discover Weekly"
                             description="Personalized picks for you"
-                            source="https://via.placeholder.com/150"
+                            imageSource={require('@/assets/img/music 10.jpg')}
                         />
                         <Card
                             title="Throwback Hits"
                             description="Classics from the past decades"
-                            source="https://via.placeholder.com/150"
+                            imageSource={require('@/assets/img/music 10.jpg')}
                         />
                     </View>
                 )}
@@ -188,6 +185,10 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginBottom: 10,
     },
+    cardImage: {
+        width: "100%",
+        height: 200,
+    },
     cardTitle: {
         fontSize: 12,
         marginBottom: 10,
@@ -206,10 +207,6 @@ const styles = StyleSheet.create({
     scrollView: {
         flex: 1,
     },
-    webView: {
-        width: "105%",
-        height: 200,
-    },
     songItem: {
         padding: 15,
         borderBottomWidth: 1,
@@ -217,6 +214,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        backgroundColor: "#f9f9f9",
     },
     songDetails: {
         flex: 1,
