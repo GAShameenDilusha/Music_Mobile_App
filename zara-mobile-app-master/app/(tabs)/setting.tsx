@@ -16,6 +16,7 @@ type RootStackParamList = {
 
 type SettingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
+
 interface SettingProps {
     navigation: SettingScreenNavigationProp;
 }
@@ -26,6 +27,7 @@ interface UserData {
     profileImage: any; // Changed to any to allow for require() result
     isPremium: boolean;
 }
+
 
 const Setting: React.FC<SettingProps> = ({ navigation }) => {
     const [user, setUser] = useState<UserData>({
