@@ -1,26 +1,25 @@
-# ZARA CLONE APP
+# SHAM Music APP
 
 1. **Loading Screen:**
-   -![Loading Screen](screenshots/sc001.jpeg)
+   -![Loading Screen](screenshots/ss%201.png)
 
 2. **Home Screen 01:**
- -![Home Screen](screenshots/sc002.jpeg)
+ -![Home Screen](screenshots/ss%202.png)
 
-3. **Home Screen 02:**
-  -![Home Screen](screenshots/sc003.jpeg)
+3. **Search Screen 01:**
+   -![Search Screen](screenshots/ss%203.png)
 
-4. **Home Screen 03:**
-  -![Home Screen](screenshots/sc004.jpeg)
+4. **Search Screen 02:**
+   -![Search Screen](screenshots/ss%204.png)
 
-5. **Search Screen 04:**
-   -![Search Screen](screenshots/sc005.jpeg)
+5. **Search Screen 03:**
+   -![Search Screen](screenshots/ss%205.png)
 
-6. **Search Screen 05:**
-   -![Search Screen](screenshots/sc006.jpeg)
+6. **Library Screen:**
+   -![Menu Screen](screenshots/ss%206.png)
 
-7. **Search Screen 06:**
-   -![Search Screen](screenshots/sc009.jpeg)
+7. **Explore Screen:**
+   -![Explore Screen](screenshots/ss%207.png)
 
-7. **Menu Screen:**
-   -![Menu Screen](screenshots/sc008.jpeg)
-   
+8. **Explore Screen:**
+   -![Explore Screen](screenshots/ss%208.png)
