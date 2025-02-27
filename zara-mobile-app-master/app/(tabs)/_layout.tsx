@@ -10,8 +10,13 @@ export default function TabLayout() {
     return (
         <Tabs
             screenOptions={{
-
                 headerShown: false,
+                tabBarStyle: {
+                    backgroundColor: '#121212', // Dark background
+                    borderTopWidth: 0, // Removes top border if any
+                },
+                tabBarActiveTintColor: '#1DB954', // Spotify-style green for active tab
+                tabBarInactiveTintColor: '#B3B3B3', // Light gray for inactive tabs
             }}>
             <Tabs.Screen
                 name="index"
@@ -45,22 +50,19 @@ export default function TabLayout() {
                 options={{
                     title: 'Explore',
                     tabBarIcon: ({ color, focused }) => (
-                        <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+                        <TabBarIcon name={focused ? 'compass' : 'compass-outline'} color={color} />
                     ),
                 }}
             />
-
             <Tabs.Screen
                 name="setting"
                 options={{
                     title: 'Profile',
                     tabBarIcon: ({ color, focused }) => (
-                        <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
+                        <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
                     ),
                 }}
             />
-
-
         </Tabs>
     );
 }
