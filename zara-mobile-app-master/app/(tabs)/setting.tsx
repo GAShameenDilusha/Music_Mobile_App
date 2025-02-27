@@ -29,9 +29,9 @@ interface UserData {
 
 const Setting: React.FC<SettingProps> = ({ navigation }) => {
     const [user, setUser] = useState<UserData>({
-        username: 'Username',
-        email: 'user@example.com',
-        profileImage: 'https://via.placeholder.com/100',
+        username: 'Shameen',
+        email: 'shameen@example.com',
+        profileImage: '{require(\'@/assets/img/album 4.jpg\')}',
         isPremium: false
     });
     const [loading, setLoading] = useState<boolean>(true);
@@ -91,7 +91,7 @@ const Setting: React.FC<SettingProps> = ({ navigation }) => {
         // In a real app, this would navigate to subscription flow
         Alert.alert(
             "Subscribe to Premium",
-            "Would you like to upgrade to Spotify Premium?",
+            "Would you like to upgrade to SHAM Premium?",
             [
                 {
                     text: "Cancel",
@@ -185,7 +185,7 @@ const Setting: React.FC<SettingProps> = ({ navigation }) => {
             {/* Premium section - only show if not already premium */}
             {!user.isPremium && (
                 <View style={styles.premiumContainer}>
-                    <Text style={styles.premiumTitle}>Spotify Premium</Text>
+                    <Text style={styles.premiumTitle}>SHAM Premium</Text>
                     <Text style={styles.premiumDesc}>Get unlimited skips, no ads, and higher audio quality</Text>
                     <TouchableOpacity
                         style={styles.premiumButton}
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     premiumButton: {
-        backgroundColor: '#1DB954', // Spotify green
+        backgroundColor: '#1DB954', // SHAM green
         borderRadius: 25,
         paddingVertical: 12,
         alignItems: 'center',
