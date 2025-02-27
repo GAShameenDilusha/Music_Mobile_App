@@ -1,57 +1,206 @@
-import {StyleSheet, Text, TouchableOpacity, View, Image} from "react-native";
-import {Ionicons} from '@expo/vector-icons'; // Assuming you're using Expo for icons
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, Image, Alert, ActivityIndicator } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-const Setting = () => {
+// Define Types
+type RootStackParamList = {
+    Login: undefined;
+    EditProfile: { user: UserData; onUpdate: (updatedUser: UserData) => void };
+    AppSettings: undefined;
+    PrivacySettings: undefined;
+    NotificationSettings: undefined;
+    PremiumSubscription: undefined;
+};
+
+type SettingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
+
+interface SettingProps {
+    navigation: SettingScreenNavigationProp;
+}
+
+interface UserData {
+    username: string;
+    email: string;
+    profileImage: string;
+    isPremium: boolean;
+}
+
+const Setting: React.FC<SettingProps> = ({ navigation }) => {
+    const [user, setUser] = useState<UserData>({
+        username: 'Username',
+        email: 'user@example.com',
+        profileImage: 'https://via.placeholder.com/100',
+        isPremium: false
+    });
+    const [loading, setLoading] = useState<boolean>(true);
+
+    // Fetch user data on component mount
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    const fetchUserData = async (): Promise<void> => {
+        try {
+            // In a real app, this would come from an API
+            // For demo purposes, we'll check if we have stored user data
+            const userData = await AsyncStorage.getItem('userData');
+            if (userData) {
+                setUser(JSON.parse(userData));
+            }
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            setLoading(false);
+        }
+    };
+
+    const handleEditProfile = (): void => {
+        // Navigate to edit profile screen
+        navigation.navigate('EditProfile', { user, onUpdate: handleProfileUpdate });
+    };
+
+    const handleSettings = (): void => {
+        navigation.navigate('AppSettings');
+    };
+
+    const handlePrivacy = (): void => {
+        navigation.navigate('PrivacySettings');
+    };
+
+    const handleNotifications = (): void => {
+        navigation.navigate('NotificationSettings');
+    };
+
+    const handleProfileUpdate = (updatedUser: UserData): void => {
+        setUser(updatedUser);
+        // Save to persistent storage
+        saveUserData(updatedUser);
+    };
+
+    const saveUserData = async (userData: UserData): Promise<void> => {
+        try {
+            await AsyncStorage.setItem('userData', JSON.stringify(userData));
+        } catch (error) {
+            console.error('Error saving user data:', error);
+        }
+    };
+
+    const handleGetPremium = (): void => {
+        // In a real app, this would navigate to subscription flow
+        Alert.alert(
+            "Subscribe to Premium",
+            "Would you like to upgrade to Spotify Premium?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Continue",
+                    onPress: () => navigation.navigate('PremiumSubscription')
+                }
+            ]
+        );
+    };
+
+    const handleLogout = (): void => {
+        Alert.alert(
+            "Logout",
+            "Are you sure you want to log out?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Logout",
+                    onPress: async () => {
+                        try {
+                            // Clear user session
+                            await AsyncStorage.removeItem('userToken');
+                            await AsyncStorage.removeItem('userData');
+                            // Navigate to login screen
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'Login' }],
+                            });
+                        } catch (error) {
+                            console.error('Error logging out:', error);
+                        }
+                    }
+                }
+            ]
+        );
+    };
+
+    if (loading) {
+        return (
+            <View style={[styles.container, styles.loadingContainer]}>
+                <ActivityIndicator size="large" color="#1DB954" />
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             {/* Header with profile image */}
             <View style={styles.header}>
                 <Image
-                    source={{ uri: 'https://via.placeholder.com/100' }}
+                    source={{ uri: user.profileImage }}
                     style={styles.profileImage}
                 />
-                <Text style={styles.username}>Username</Text>
-                <Text style={styles.email}>user@example.com</Text>
+                <Text style={styles.username}>{user.username}</Text>
+                <Text style={styles.email}>{user.email}</Text>
             </View>
 
             {/* Option buttons with icons */}
             <View style={styles.optionsContainer}>
-                <TouchableOpacity style={styles.option}>
+                <TouchableOpacity style={styles.option} onPress={handleEditProfile}>
                     <Ionicons name="person-outline" size={22} color="#fff" />
                     <Text style={styles.optionText}>Edit Profile</Text>
                     <Ionicons name="chevron-forward" size={22} color="#b3b3b3" style={styles.chevron} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.option}>
+                <TouchableOpacity style={styles.option} onPress={handleSettings}>
                     <Ionicons name="settings-outline" size={22} color="#fff" />
                     <Text style={styles.optionText}>Settings</Text>
                     <Ionicons name="chevron-forward" size={22} color="#b3b3b3" style={styles.chevron} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.option}>
+                <TouchableOpacity style={styles.option} onPress={handlePrivacy}>
                     <Ionicons name="shield-checkmark-outline" size={22} color="#fff" />
                     <Text style={styles.optionText}>Privacy</Text>
                     <Ionicons name="chevron-forward" size={22} color="#b3b3b3" style={styles.chevron} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.option}>
+                <TouchableOpacity style={styles.option} onPress={handleNotifications}>
                     <Ionicons name="notifications-outline" size={22} color="#fff" />
                     <Text style={styles.optionText}>Notifications</Text>
                     <Ionicons name="chevron-forward" size={22} color="#b3b3b3" style={styles.chevron} />
                 </TouchableOpacity>
             </View>
 
-            {/* Premium section */}
-            <View style={styles.premiumContainer}>
-                <Text style={styles.premiumTitle}>Spotify Premium</Text>
-                <Text style={styles.premiumDesc}>Get unlimited skips, no ads, and higher audio quality</Text>
-                <TouchableOpacity style={styles.premiumButton}>
-                    <Text style={styles.premiumButtonText}>GET PREMIUM</Text>
-                </TouchableOpacity>
-            </View>
+            {/* Premium section - only show if not already premium */}
+            {!user.isPremium && (
+                <View style={styles.premiumContainer}>
+                    <Text style={styles.premiumTitle}>Spotify Premium</Text>
+                    <Text style={styles.premiumDesc}>Get unlimited skips, no ads, and higher audio quality</Text>
+                    <TouchableOpacity
+                        style={styles.premiumButton}
+                        onPress={handleGetPremium}
+                    >
+                        <Text style={styles.premiumButtonText}>GET PREMIUM</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
 
             {/* Logout button */}
-            <TouchableOpacity style={styles.logoutButton}>
+            <TouchableOpacity
+                style={styles.logoutButton}
+                onPress={handleLogout}
+            >
                 <Text style={styles.logoutButtonText}>Log out</Text>
             </TouchableOpacity>
         </View>
@@ -63,6 +212,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#121212',
         padding: 20,
+    },
+    loadingContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     header: {
         alignItems: 'center',
