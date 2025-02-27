@@ -379,8 +379,8 @@ const styles = StyleSheet.create({
         marginVertical: 30,
     },
     albumArt: {
-        width: width - 300,
-        height: width - 300,
+        width: width - 100,
+        height: width - 100,
         borderRadius: 10,
     },
     songInfoContainer: {
