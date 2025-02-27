@@ -23,6 +23,7 @@ interface Song {
     duration?: string; // Optional duration for the player
 }
 
+
 // MusicPlayer component for the popup
 const MusicPlayer = ({
                          song,
