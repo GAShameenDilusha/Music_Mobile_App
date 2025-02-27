@@ -23,7 +23,7 @@ interface SettingProps {
 interface UserData {
     username: string;
     email: string;
-    profileImage: string;
+    profileImage: any; // Changed to any to allow for require() result
     isPremium: boolean;
 }
 
@@ -31,7 +31,7 @@ const Setting: React.FC<SettingProps> = ({ navigation }) => {
     const [user, setUser] = useState<UserData>({
         username: 'Shameen',
         email: 'shameen@example.com',
-        profileImage: '{require(\'@/assets/img/album 4.jpg\')}',
+        profileImage: require('@/assets/img/my profile.jpg'), // Fixed: Using proper require syntax
         isPremium: false
     });
     const [loading, setLoading] = useState<boolean>(true);
@@ -47,7 +47,15 @@ const Setting: React.FC<SettingProps> = ({ navigation }) => {
             // For demo purposes, we'll check if we have stored user data
             const userData = await AsyncStorage.getItem('userData');
             if (userData) {
-                setUser(JSON.parse(userData));
+                // Parse the stored data
+                const parsedData = JSON.parse(userData);
+
+                // We need to handle the profileImage separately since require() can't be stored in AsyncStorage
+                setUser({
+                    ...parsedData,
+                    // Ensure we always use the require for the profile image
+                    profileImage: require('@/assets/img/album 4.jpg')
+                });
             }
             setLoading(false);
         } catch (error) {
@@ -74,12 +82,27 @@ const Setting: React.FC<SettingProps> = ({ navigation }) => {
     };
 
     const handleProfileUpdate = (updatedUser: UserData): void => {
-        setUser(updatedUser);
+        // Make sure we preserve the profileImage require
+        const updatedUserWithImage = {
+            ...updatedUser,
+            profileImage: require('@/assets/img/album 4.jpg')
+        };
+
+        setUser(updatedUserWithImage);
+
+        // When saving to AsyncStorage, we need to handle the profileImage differently
+        // since we can't serialize the require() result
+        const userDataForStorage = {
+            ...updatedUser,
+            // Just store a reference path instead of the actual require result
+            profileImage: '@/assets/img/album 4.jpg'
+        };
+
         // Save to persistent storage
-        saveUserData(updatedUser);
+        saveUserData(userDataForStorage);
     };
 
-    const saveUserData = async (userData: UserData): Promise<void> => {
+    const saveUserData = async (userData: any): Promise<void> => {
         try {
             await AsyncStorage.setItem('userData', JSON.stringify(userData));
         } catch (error) {
@@ -148,7 +171,7 @@ const Setting: React.FC<SettingProps> = ({ navigation }) => {
             {/* Header with profile image */}
             <View style={styles.header}>
                 <Image
-                    source={{ uri: user.profileImage }}
+                    source={user.profileImage} // Use the image directly, no need for {uri}
                     style={styles.profileImage}
                 />
                 <Text style={styles.username}>{user.username}</Text>
