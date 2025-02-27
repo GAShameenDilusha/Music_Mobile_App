@@ -11,6 +11,7 @@ export default function HomeScreen() {
     };
 
     return (
+
         <View style={styles.mainContainer}>
             <StatusBar barStyle="light-content" />
 
