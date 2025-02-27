@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+
 // Type definitions
 interface Song {
     id: string;
@@ -23,12 +24,14 @@ interface Song {
     duration?: string;
 }
 
+
 interface Playlist {
     id: string;
     name: string;
     songs: Song[];
     coverImage?: any;
 }
+
 
 // Playlist Detail Component
 const PlaylistDetail = ({
