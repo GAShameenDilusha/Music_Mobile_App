@@ -10,6 +10,7 @@ export default function TabTwoScreen() {
     };
 
     return (
+
         <ScrollView style={styles.container}>
             {/* Header with Logo */}
             <View style={styles.header}>
